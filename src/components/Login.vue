@@ -63,18 +63,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref ,reactive} from "vue";
+import { ref, reactive } from "vue";
+import type { FormRules } from "element-plus";
+
 const panelsToggle = ref(false);
 
 function togglePanelss() {
   panelsToggle.value = !panelsToggle.value;
 }
-const loginUser = ref({
+interface LoginUser {
+  email: string
+  password: string
+}
+const loginUser = ref<LoginUser>({
   email: "",
   password: "",
 });
 //校驗規則
-const rules = ref({
+const rules = ref<FormRules>({
   email: [
     {
       type: "email",
