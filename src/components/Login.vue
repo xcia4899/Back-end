@@ -6,16 +6,15 @@
         <!-- 登錄 -->
         <el-form
           :model="loginUser"
+          :rules="rules"
           status-icon
           label-width="auto"
           class="loginForm sign-in-form"
         >
           <el-form-item label="帳號" prop="email">
-          
-            <el-input v-model="loginUser.emaill" placeholder="輸入帳號" />
+            <el-input v-model="loginUser.email" placeholder="輸入帳號" />
           </el-form-item>
           <el-form-item label="密碼" prop="password">
-          
             <el-input v-model="loginUser.password" placeholder="輸入密碼" />
           </el-form-item>
 
@@ -64,15 +63,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref ,reactive} from "vue";
 const panelsToggle = ref(false);
 
 function togglePanelss() {
   panelsToggle.value = !panelsToggle.value;
 }
 const loginUser = ref({
-  emaill: "",
+  email: "",
   password: "",
+});
+//校驗規則
+const rules = ref({
+  email: [
+    {
+      type: "email",
+      message: "帳號格式不正確",
+      trigger: "blur",
+      required: true,
+    },
+  ],
+  password: [
+    { message: "密碼不能為空", trigger: "blur", required: true },
+    { min: 6, max: 20, message: "密碼長度 6-20 位", trigger: "blur" },
+  ],
 });
 </script>
 
