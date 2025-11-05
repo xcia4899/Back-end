@@ -72,8 +72,8 @@ function togglePanelss() {
   panelsToggle.value = !panelsToggle.value;
 }
 interface LoginUser {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 const loginUser = ref<LoginUser>({
   email: "",
@@ -97,8 +97,6 @@ const rules = ref<FormRules>({
 </script>
 
 <style scoped lang="scss">
-$cardW: 460px;
-$gap: 20px;
 .circle {
   position: absolute;
   left: -64px;
@@ -112,9 +110,19 @@ $gap: 20px;
   background-color: $yellow;
   z-index: 1;
   pointer-events: none;
+  @media (max-width: 768px) {
+    height: 110vh;
+    top: -60px;
+    left: -100px;
+  }
 }
 .circleToggle {
   left: calc(100% + 64px);
+   @media (max-width: 768px) {
+    height: 110vh;
+    top: calc(100% + 160px);
+    left: calc(100% );
+  }
 }
 .container {
   position: relative;
@@ -128,35 +136,45 @@ $gap: 20px;
     position: absolute;
     display: flex;
     justify-content: space-between;
-    gap: $gap;
+    gap: 20px;
     top: 0;
     height: 100%;
-    width: calc(100% + #{$cardW} + #{$gap} - 32px);
+    width: calc(100% + #{460px} + #{20px} - 32px);
     transition: all 0.4s ease-in 0.2s;
     // overflow: hidden;
     pointer-events: none;
     z-index: 2;
+    @media (max-width: 768px) {
+      width: calc(100% + #{360px} + #{20px} - 32px);
+    }
     .panel {
       // height: 200px;
-      flex: 0 0 $cardW;
+      width: 460px;
       display: flex;
       flex-direction: column;
+      @media (max-width: 768px) {
+        width: 360px;
+        justify-content: space-between;
+      }
       .content {
         text-align: center;
         height: 40%;
       }
       img {
         max-height: 400px;
-        min-height: 120px;
         // width: 200px;
         object-fit: contain;
         object-position: left;
         display: block;
         transition: all 0.4s ease-out;
-        transform: translateX($gap);
+        transform: translateX(20px);
+        @media (max-width: 768px) {
+          max-height: 160px;
+          object-position: bottom center;
+        }
       }
       .imgToggle {
-        transform: translateX(-$gap);
+        transform: translateX(-20px);
       }
       .btn {
         pointer-events: auto; /* 允許點擊 */
@@ -181,7 +199,10 @@ $gap: 20px;
     }
   }
   .panels-toggle {
-    transform: translateX(calc(-#{$cardW} - #{$gap}));
+    transform: translateX(calc(-#{460px} - #{20px}));
+    @media (max-width: 768px) {
+      transform: translateX(calc(-#{360px} - #{20px}));
+    }
   }
 
   .forms-container {
@@ -189,12 +210,15 @@ $gap: 20px;
     left: 56%;
     top: 40%;
     z-index: 1;
-
+    @media (max-width: 768px) {
+      left: 10%;
+      margin: 0 auto;
+    }
     .signin-signup {
       display: flex;
       gap: 20px;
+      width: 600px;
       font-weight: 900;
-
       .btn {
         background-color: #297eff;
         color: #fff;
@@ -212,6 +236,10 @@ $gap: 20px;
       background-color: #eeeeee;
       border-radius: 8px;
       box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+      @media (max-width: 768px) {
+        width: 80vw;
+     
+      }
       .tiparea {
         font-size: 14px;
         text-align: right;
