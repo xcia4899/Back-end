@@ -4,9 +4,30 @@
     <div class="forms-container">
       <div class="signin-signup">
         <!-- 登錄 -->
-        <h1>登录</h1>
+        <el-form
+          :model="loginUser"
+          status-icon
+          label-width="auto"
+          class="loginForm sign-in-form"
+        >
+          <el-form-item label="帳號" prop="email">
+          
+            <el-input v-model="loginUser.emaill" placeholder="輸入帳號" />
+          </el-form-item>
+          <el-form-item label="密碼" prop="password">
+          
+            <el-input v-model="loginUser.password" placeholder="輸入密碼" />
+          </el-form-item>
+
+          <el-form-item>
+            <el-button class="btn"> 確認 </el-button>
+          </el-form-item>
+          <div class="tiparea">
+            <p>忘記密碼 <a href="">立即找回</a></p>
+          </div>
+        </el-form>
+
         <!-- 注册 -->
-        <h1>注册</h1>
       </div>
     </div>
 
@@ -38,7 +59,7 @@
         />
       </div>
     </div>
-    <div class="circle" :class="{'circleToggle': panelsToggle}"></div>
+    <div class="circle" :class="{ circleToggle: panelsToggle }"></div>
   </div>
 </template>
 
@@ -49,6 +70,10 @@ const panelsToggle = ref(false);
 function togglePanelss() {
   panelsToggle.value = !panelsToggle.value;
 }
+const loginUser = ref({
+  emaill: "",
+  password: "",
+});
 </script>
 
 <style scoped lang="scss">
@@ -58,21 +83,22 @@ $gap: 20px;
   position: absolute;
   left: -64px;
   top: 0;
-  transition: all 1s ease-in-out ;
+  transition: all 1s ease-in-out;
   transform: translate(-50%, -50%);
   // width: 100%;
-  height: 180vh;
+  height: 170vh;
   aspect-ratio: 1/1;
   border-radius: 100%;
   background-color: $yellow;
-  z-index: -1;
+  z-index: 1;
+  pointer-events: none;
 }
-.circleToggle{
-  transform: translate(50%, -50%);
+.circleToggle {
+  left: calc(100% + 64px);
 }
 .container {
-  position: relative; 
-  padding: 32px;
+  position: relative;
+  padding: 16px;
   // width: 100vw;
   width: 100%;
   height: 100vh;
@@ -85,9 +111,11 @@ $gap: 20px;
     gap: $gap;
     top: 0;
     height: 100%;
-    width: calc(100% + #{$cardW} + #{$gap} + 32px);
+    width: calc(100% + #{$cardW} + #{$gap} - 32px);
     transition: all 0.4s ease-in 0.2s;
     // overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
     .panel {
       // height: 200px;
       flex: 0 0 $cardW;
@@ -105,12 +133,15 @@ $gap: 20px;
         object-position: left;
         display: block;
         transition: all 0.4s ease-out;
-        transform: translateX(0%);
+        transform: translateX($gap);
       }
       .imgToggle {
         transform: translateX(-$gap);
       }
       .btn {
+        pointer-events: auto; /* 允許點擊 */
+        position: relative;
+        z-index: 3; /* 最上層 */
         padding: 4px 16px;
         border: 2px solid #333;
         font-size: 16px;
@@ -132,12 +163,45 @@ $gap: 20px;
   .panels-toggle {
     transform: translateX(calc(-#{$cardW} - #{$gap}));
   }
+
   .forms-container {
     position: absolute;
+    left: 56%;
+    top: 40%;
+    z-index: 1;
 
-    left: 50%;
-    top: 50%;
-    z-index: -2;
+    .signin-signup {
+      display: flex;
+      gap: 20px;
+      font-weight: 900;
+
+      .btn {
+        background-color: #297eff;
+        color: #fff;
+        width: 100%;
+        // margin: 0 auto;
+        margin-left: auto;
+        &:hover {
+          background-color: #e97171;
+        }
+      }
+    }
+    .loginForm {
+      width: 32vw;
+      padding: 16px 16px;
+      background-color: #eeeeee;
+      border-radius: 8px;
+      box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+      .tiparea {
+        font-size: 14px;
+        text-align: right;
+        // height: 20px;
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
   }
 }
 </style>
