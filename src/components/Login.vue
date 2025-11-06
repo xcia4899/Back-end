@@ -5,6 +5,7 @@
       <div class="signin-signup">
         <!-- 登錄 -->
         <el-form
+          ref="loginForm"
           :model="loginUser"
           :rules="rules"
           status-icon
@@ -19,7 +20,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button class="btn"> 確認 </el-button>
+            <el-button @click="handleLogin" class="btn"> 確認 </el-button>
           </el-form-item>
           <div class="tiparea">
             <p>忘記密碼 <a href="">立即找回</a></p>
@@ -63,8 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import type { FormRules } from "element-plus";
+import { ref, reactive, getCurrentInstance } from "vue";
+import type { FormInstance, FormRules } from "element-plus";
 
 const panelsToggle = ref(false);
 
@@ -75,7 +76,7 @@ interface LoginUser {
   email: string;
   password: string;
 }
-const loginUser = ref<LoginUser>({
+const loginUser = reactive<LoginUser>({
   email: "",
   password: "",
 });
@@ -94,6 +95,17 @@ const rules = ref<FormRules>({
     { min: 6, max: 20, message: "密碼長度 6-20 位", trigger: "blur" },
   ],
 });
+//觸發方法
+const loginForm = ref<FormInstance>();
+const handleLogin = async () => {
+  const valid = await loginForm.value?.validate().catch(() => false)
+  if (!valid) return console.log('驗證失敗')
+
+  console.log('驗證成功')
+  console.log('帳號:', loginUser.email)
+  console.log('密碼:', loginUser.password)
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -118,10 +130,10 @@ const rules = ref<FormRules>({
 }
 .circleToggle {
   left: calc(100% + 64px);
-   @media (max-width: 768px) {
+  @media (max-width: 768px) {
     height: 110vh;
     top: calc(100% + 160px);
-    left: calc(100% );
+    left: calc(100%);
   }
 }
 .container {
@@ -238,7 +250,6 @@ const rules = ref<FormRules>({
       box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
       @media (max-width: 768px) {
         width: 80vw;
-     
       }
       .tiparea {
         font-size: 14px;
