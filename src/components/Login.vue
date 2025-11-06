@@ -248,7 +248,7 @@ const registerSubmit = () => {};
         visibility: hidden;
         left: 46%;
         @media (max-width: 768px) {
-          left: 40%;
+          left: 20%;
           margin: 0 auto;
         }
       }
@@ -262,7 +262,7 @@ const registerSubmit = () => {};
       opacity: 0;
       transition: all 0.4s ease-in 0.3s;
       @media (max-width: 768px) {
-        left: 10%;
+        left: 0%;
         margin: 0 auto;
       }
       &.RegisterForm-toggle {
