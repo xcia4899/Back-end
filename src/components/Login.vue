@@ -1,31 +1,14 @@
 <template>
   <div class="container">
     <!-- form表單容器 -->
-    <div class="forms-container">
+    <div class="forms-container" :class="{ 'forms-toggle': panelsToggle }">
       <div class="signin-signup">
         <!-- 登錄 -->
-        <el-form
-          ref="loginForm"
-          :model="loginUser"
+        <LoginForm
+          :loginUser="loginUser"
           :rules="rules"
-          status-icon
-          label-width="auto"
-          class="loginForm sign-in-form"
-        >
-          <el-form-item label="帳號" prop="email">
-            <el-input v-model="loginUser.email" placeholder="輸入帳號" />
-          </el-form-item>
-          <el-form-item label="密碼" prop="password">
-            <el-input v-model="loginUser.password" placeholder="輸入密碼" />
-          </el-form-item>
-
-          <el-form-item>
-            <el-button @click="handleLogin" class="btn"> 確認 </el-button>
-          </el-form-item>
-          <div class="tiparea">
-            <p>忘記密碼 <a href="">立即找回</a></p>
-          </div>
-        </el-form>
+          :handleLogin="handleLogin"
+        />
 
         <!-- 注册 -->
       </div>
@@ -64,48 +47,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, getCurrentInstance } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
+import {ref} from "vue";
+import { useLogin } from "@/hooks/useLogin";
+import LoginForm from "./LoginForm.vue";
+const {  loginUser, rules, handleLogin } = useLogin();
 
-const panelsToggle = ref(false);
-
-function togglePanelss() {
+const panelsToggle = ref(false)
+  // 登入面板切換
+const togglePanelss = () => {
   panelsToggle.value = !panelsToggle.value;
-}
-interface LoginUser {
-  email: string;
-  password: string;
-}
-const loginUser = reactive<LoginUser>({
-  email: "",
-  password: "",
-});
-//校驗規則
-const rules = ref<FormRules>({
-  email: [
-    {
-      type: "email",
-      message: "帳號格式不正確",
-      trigger: "blur",
-      required: true,
-    },
-  ],
-  password: [
-    { message: "密碼不能為空", trigger: "blur", required: true },
-    { min: 6, max: 20, message: "密碼長度 6-20 位", trigger: "blur" },
-  ],
-});
-//觸發方法
-const loginForm = ref<FormInstance>();
-const handleLogin = async () => {
-  const valid = await loginForm.value?.validate().catch(() => false)
-  if (!valid) return console.log('驗證失敗')
-
-  console.log('驗證成功')
-  console.log('帳號:', loginUser.email)
-  console.log('密碼:', loginUser.password)
-}
-
+};
 </script>
 
 <style scoped lang="scss">
@@ -222,6 +173,7 @@ const handleLogin = async () => {
     left: 56%;
     top: 40%;
     z-index: 1;
+    transition: all 0.5s ease-in-out;
     @media (max-width: 768px) {
       left: 10%;
       margin: 0 auto;
@@ -229,37 +181,14 @@ const handleLogin = async () => {
     .signin-signup {
       display: flex;
       gap: 20px;
-      width: 600px;
       font-weight: 900;
-      .btn {
-        background-color: #297eff;
-        color: #fff;
-        width: 100%;
-        // margin: 0 auto;
-        margin-left: auto;
-        &:hover {
-          background-color: #e97171;
-        }
-      }
     }
-    .loginForm {
-      width: 32vw;
-      padding: 16px 16px;
-      background-color: #eeeeee;
-      border-radius: 8px;
-      box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
-      @media (max-width: 768px) {
-        width: 80vw;
-      }
-      .tiparea {
-        font-size: 14px;
-        text-align: right;
-        // height: 20px;
-        p {
-          margin: 0;
-          padding: 0;
-        }
-      }
+  }
+  .forms-toggle {
+    left: 16%;
+    @media (max-width: 768px) {
+      left: 10%;
+      margin: 0 auto;
     }
   }
 }
