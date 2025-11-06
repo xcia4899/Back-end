@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <!-- form表單容器 -->
-    <div class="forms-container" :class="{ 'forms-toggle': panelsToggle }">
+    <div class="forms-container">
       <div class="signin-signup">
         <!-- 登錄 -->
         <LoginForm
           :loginUser="loginUser"
           :rules="rules"
           :handleLogin="handleLogin"
+          class="LoginForm"
+          :class="{ 'LoginForm-toggle': panelsToggle }"
         />
 
         <!-- 注册 -->
@@ -47,13 +49,13 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import { ref } from "vue";
 import { useLogin } from "@/hooks/useLogin";
 import LoginForm from "./LoginForm.vue";
-const {  loginUser, rules, handleLogin } = useLogin();
+const { loginUser, rules, handleLogin } = useLogin();
 
-const panelsToggle = ref(false)
-  // 登入面板切換
+const panelsToggle = ref(false);
+// 登入面板切換
 const togglePanelss = () => {
   panelsToggle.value = !panelsToggle.value;
 };
@@ -78,15 +80,16 @@ const togglePanelss = () => {
     top: -60px;
     left: -100px;
   }
-}
-.circleToggle {
-  left: calc(100% + 64px);
-  @media (max-width: 768px) {
-    height: 110vh;
-    top: calc(100% + 160px);
-    left: calc(100%);
+  &.circleToggle {
+    left: calc(100% + 64px);
+    @media (max-width: 768px) {
+      height: 110vh;
+      top: calc(100% + 160px);
+      left: calc(100%);
+    }
   }
 }
+
 .container {
   position: relative;
   padding: 16px;
@@ -160,35 +163,40 @@ const togglePanelss = () => {
         }
       }
     }
-  }
-  .panels-toggle {
-    transform: translateX(calc(-#{460px} - #{20px}));
-    @media (max-width: 768px) {
-      transform: translateX(calc(-#{360px} - #{20px}));
+    &.panels-toggle {
+      transform: translateX(calc(-#{460px} - #{20px}));
+      @media (max-width: 768px) {
+        transform: translateX(calc(-#{360px} - #{20px}));
+      }
     }
   }
 
   .forms-container {
-    position: absolute;
-    left: 56%;
-    top: 40%;
-    z-index: 1;
-    transition: all 0.5s ease-in-out;
-    @media (max-width: 768px) {
-      left: 10%;
-      margin: 0 auto;
-    }
-    .signin-signup {
-      display: flex;
-      gap: 20px;
-      font-weight: 900;
-    }
-  }
-  .forms-toggle {
-    left: 16%;
-    @media (max-width: 768px) {
-      left: 10%;
-      margin: 0 auto;
+    // border: 1px solid;
+    font-weight: 900;
+    width: 100%;
+    height: 100%;
+    .LoginForm {
+      position: absolute;
+      left: 56%;
+      top: 40%;
+      z-index: 1;
+      visibility: visible;
+      opacity: 1;
+      transition: all 0.4s ease-in 0.2s;
+      @media (max-width: 768px) {
+        left: 10%;
+        margin: 0 auto;
+      }
+      &.LoginForm-toggle {
+        opacity: 0;
+        visibility: hidden;
+        left: 46%;
+        @media (max-width: 768px) {
+          left: 40%;
+          margin: 0 auto;
+        }
+      }
     }
   }
 }
