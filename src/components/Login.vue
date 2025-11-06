@@ -11,8 +11,46 @@
           class="LoginForm"
           :class="{ 'LoginForm-toggle': panelsToggle }"
         />
-
         <!-- 注册 -->
+        <el-form
+          ref="registerForm"
+          :model="registerUser"
+          :rules="rules"
+          status-icon
+          label-width="auto"
+          class="RegisterForm sign-up-form"
+          :class="{ 'RegisterForm-toggle': panelsToggle }"
+        >
+          <el-form-item label="名子" prop="name">
+            <el-input v-model="registerUser.name" placeholder="請輸入用戶名" />
+          </el-form-item>
+          <el-form-item label="信箱" prop="email">
+            <el-input v-model="registerUser.email" placeholder="請輸入信箱" />
+          </el-form-item>
+          <el-form-item label="密碼" prop="password">
+            <el-input
+              v-model="registerUser.password"
+              placeholder="請輸入密碼"
+            />
+          </el-form-item>
+          <el-form-item label="確認密碼" prop="confirmPassword">
+            <el-input
+              v-model="registerUser.password"
+              placeholder="再次輸入密碼"
+            />
+          </el-form-item>
+          <el-form-item label="選擇身分">
+            <el-select v-model="registerUser.role" placeholder="選擇身分">
+              <el-option label="管理員" value="admin" />
+              <el-option label="一般使用者" value="user" />
+              <el-option label="訪客" value="visitor" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button @click="registerSubmit" class="btn"> 確認 </el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
 
@@ -49,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { useLogin } from "@/hooks/useLogin";
 import LoginForm from "./LoginForm.vue";
 const { loginUser, rules, handleLogin } = useLogin();
@@ -59,6 +97,22 @@ const panelsToggle = ref(false);
 const togglePanelss = () => {
   panelsToggle.value = !panelsToggle.value;
 };
+interface RegisterUser {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: 'admin' | 'user' | 'visitor' | ''
+}
+const registerUser = reactive<RegisterUser>({
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  role: "",
+});
+const registerForm = ref("");
+const registerSubmit = () => {};
 </script>
 
 <style scoped lang="scss">
@@ -148,6 +202,7 @@ const togglePanelss = () => {
         z-index: 3; /* 最上層 */
         padding: 4px 16px;
         border: 2px solid #333;
+        width: 40%;
         font-size: 16px;
         font-weight: bold;
         letter-spacing: 2px;
@@ -183,7 +238,7 @@ const togglePanelss = () => {
       z-index: 1;
       visibility: visible;
       opacity: 1;
-      transition: all 0.4s ease-in 0.2s;
+     transition: all 0.4s ease-in 0.3s;
       @media (max-width: 768px) {
         left: 10%;
         margin: 0 auto;
@@ -195,6 +250,57 @@ const togglePanelss = () => {
         @media (max-width: 768px) {
           left: 40%;
           margin: 0 auto;
+        }
+      }
+    }
+    .RegisterForm {
+      position: absolute;
+      left: 30%;
+      top: 30%;
+      z-index: 1;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.4s ease-in 0.3s;
+      @media (max-width: 768px) {
+        left: 10%;
+        margin: 0 auto;
+      }
+      &.RegisterForm-toggle {
+        opacity: 1;
+        visibility: visible;
+        left: 12%;
+        @media (max-width: 768px) {
+          left: 10%;
+          margin: 0 auto;
+        }
+      }
+
+      width: 32vw;
+      padding: 16px 16px;
+      background-color: #eeeeee;
+      border-radius: 8px;
+      box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+      @media (max-width: 768px) {
+        width: 80vw;
+      }
+      .tiparea {
+        font-size: 14px;
+        text-align: right;
+        // height: 20px;
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+      .btn {
+        background-color: #297eff;
+        color: #fff;
+        letter-spacing: 1.5px;
+        width: 100%;
+        margin-left: auto;
+        transition: all 0.4s ease;
+        &:hover {
+          background-color: #169b64;
         }
       }
     }
