@@ -7,6 +7,7 @@
         <LoginForm
           :loginUser="loginUser"
           :rules="rules"
+          :formRef="formRef"
           :handleLogin="handleLogin"
           class="LoginForm"
           :class="{ 'LoginForm-toggle': panelsToggle }"
@@ -15,13 +16,13 @@
         <el-form
           ref="registerForm"
           :model="registerUser"
-          :rules="rules"
+          :rules="registrRules"
           status-icon
           label-width="auto"
           class="RegisterForm sign-up-form"
           :class="{ 'RegisterForm-toggle': panelsToggle }"
         >
-          <el-form-item label="名子" prop="name">
+          <el-form-item label="姓名" prop="name">
             <el-input v-model="registerUser.name" placeholder="請輸入用戶名" />
           </el-form-item>
           <el-form-item label="信箱" prop="email">
@@ -30,13 +31,17 @@
           <el-form-item label="密碼" prop="password">
             <el-input
               v-model="registerUser.password"
+              type="password"
               placeholder="請輸入密碼"
+              show-password
             />
           </el-form-item>
           <el-form-item label="確認密碼" prop="confirmPassword">
             <el-input
-              v-model="registerUser.password"
+              v-model="registerUser.confirmPassword"
+              type="password"
               placeholder="再次輸入密碼"
+              show-password
             />
           </el-form-item>
           <el-form-item label="選擇身分">
@@ -87,22 +92,28 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { useLogin } from "@/hooks/useLogin";
 import LoginForm from "./LoginForm.vue";
-const { loginUser, rules, handleLogin } = useLogin();
+import type { FormInstance, FormRules } from "element-plus";
+
+const { loginUser, rules, formRef , handleLogin } = useLogin();
+
 
 const panelsToggle = ref(false);
 // 登入面板切換
 const togglePanelss = () => {
   panelsToggle.value = !panelsToggle.value;
 };
+
+
+//註冊案件類型推斷
 interface RegisterUser {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
-  role: 'admin' | 'user' | 'visitor' | ''
+  role: "admin" | "user" | "visitor" | "";
 }
 const registerUser = reactive<RegisterUser>({
   name: "",
@@ -111,8 +122,59 @@ const registerUser = reactive<RegisterUser>({
   confirmPassword: "",
   role: "",
 });
-const registerForm = ref("");
-const registerSubmit = () => {};
+
+const registerForm = ref<FormInstance | null>(null);
+
+//二次密碼驗證
+const valuealidatePass2 = (_rule: any, value: string, callback: any) => {
+  if (!value) callback(new Error("請再次輸入密碼"));
+  else if (value !== registerUser.password)
+    callback(new Error("兩次密碼不一致"));
+  else callback();
+};
+//規則
+const registrRules: FormRules<RegisterUser> = {
+  name: [
+    { required: true, message: "姓名不能空", trigger: "blur" },
+    { min: 2, max: 30, message: "姓名最少為2字，最多30字", trigger: "blur" },
+  ],
+  email: [
+    { required: true, message: "請輸入信箱", trigger: "blur" },
+    { type: "email", message: "Email 格式不正確", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: "請輸入密碼", trigger: "blur" },
+    { min: 6, max: 20, message: "密碼需為 6-20 碼", trigger: "blur" },
+  ],
+  confirmPassword: [
+    { required: true, message: "請輸入密碼", trigger: "blur" },
+    { min: 6, max: 20, message: "密碼需為 6-20 碼", trigger: "blur" },
+    { validator: valuealidatePass2, trigger: "blur" },
+  ],
+  role: [{ required: true, trigger: "change" }],
+};
+//密碼改變時，重新驗證確認密碼
+watch(
+  () => registerUser.password,
+  () => {
+    registerForm.value?.validateField("confirmPassword");
+  }
+);
+//驗證以及提交
+// const registerSubmit = () => {};
+const registerSubmit = async () => {
+  if (!registerForm.value) return;
+  try {
+    await registerForm.value.validate(); // 通過則不拋錯
+    console.log("表單驗證通過");
+    console.log("姓名:", registerUser.name);
+    console.log("信箱:", registerUser.email);
+    console.log("密碼:", registerUser.password);
+    console.log("角色:", registerUser.role);
+  } catch (err) {
+    console.log("表單驗證失敗", err);
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -120,7 +182,7 @@ const registerSubmit = () => {};
   position: absolute;
   left: -64px;
   top: 0;
-  transition: all 1s ease-in-out;
+  transition: all 2s ease-in-out;
   transform: translate(-50%, -50%);
   // width: 100%;
   height: 170vh;
@@ -160,7 +222,7 @@ const registerSubmit = () => {};
     top: 0;
     height: 100%;
     width: calc(100% + #{460px} + #{20px} - 32px);
-    transition: all 0.4s ease-in 0.2s;
+    transition: all 0.6s ease-in 0.8s;
     // overflow: hidden;
     pointer-events: none;
     z-index: 2;
@@ -186,7 +248,7 @@ const registerSubmit = () => {};
         object-fit: contain;
         object-position: left;
         display: block;
-        transition: all 0.4s ease-out;
+        transition: all 1.2s ease-out 0.6s;
         transform: translateX(20px);
         @media (max-width: 768px) {
           max-height: 160px;
@@ -216,6 +278,9 @@ const registerSubmit = () => {};
           color: #111;
           box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
         }
+        &:active {
+          background-color: #d4d4d4;
+        }
       }
     }
     &.panels-toggle {
@@ -238,7 +303,7 @@ const registerSubmit = () => {};
       z-index: 1;
       visibility: visible;
       opacity: 1;
-     transition: all 0.4s ease-in 0.3s;
+      transition: all 0.6s ease-in 0.7s;
       @media (max-width: 768px) {
         left: 10%;
         margin: 0 auto;
@@ -260,7 +325,7 @@ const registerSubmit = () => {};
       z-index: 1;
       visibility: hidden;
       opacity: 0;
-      transition: all 0.4s ease-in 0.3s;
+      transition: all 0.6s ease-in 0.7s;
       @media (max-width: 768px) {
         left: 0%;
         margin: 0 auto;
