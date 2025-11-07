@@ -8,54 +8,21 @@
           :loginUser="loginUser"
           :rules="rules"
           :formRef="formRef"
-          :handleLogin="handleLogin"
+          :leLoginSubmit="leLoginSubmit"
+          :dddd="dddd"
           class="LoginForm"
           :class="{ 'LoginForm-toggle': panelsToggle }"
         />
         <!-- 注册 -->
-        <el-form
-          ref="registerForm"
-          :model="registerUser"
-          :rules="registrRules"
-          status-icon
-          label-width="auto"
+        <RegisterForm
+        ref="registerForm"
+          :registerUser="registerUser"
+          :registerForm="registerForm"
+          :registrRules="registrRules"
+          :registerSubmit="registerSubmit"
           class="RegisterForm sign-up-form"
           :class="{ 'RegisterForm-toggle': panelsToggle }"
-        >
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="registerUser.name" placeholder="請輸入用戶名" />
-          </el-form-item>
-          <el-form-item label="信箱" prop="email">
-            <el-input v-model="registerUser.email" placeholder="請輸入信箱" />
-          </el-form-item>
-          <el-form-item label="密碼" prop="password">
-            <el-input
-              v-model="registerUser.password"
-              type="password"
-              placeholder="請輸入密碼"
-              show-password
-            />
-          </el-form-item>
-          <el-form-item label="確認密碼" prop="confirmPassword">
-            <el-input
-              v-model="registerUser.confirmPassword"
-              type="password"
-              placeholder="再次輸入密碼"
-              show-password
-            />
-          </el-form-item>
-          <el-form-item label="選擇身分">
-            <el-select v-model="registerUser.role" placeholder="選擇身分">
-              <el-option label="管理員" value="admin" />
-              <el-option label="一般使用者" value="user" />
-              <el-option label="訪客" value="visitor" />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button @click="registerSubmit" class="btn"> 確認 </el-button>
-          </el-form-item>
-        </el-form>
+        />
       </div>
     </div>
 
@@ -96,11 +63,12 @@ import { reactive, ref, watch } from "vue";
 import { useLogin } from "@/hooks/useLogin";
 import { useRegister  } from "@/hooks/useRegister"
 
-import LoginForm from "./LoginForm.vue";
+import LoginForm from "@/components/LoginForm.vue";
+import RegisterForm from "@/components/RegisterForm.vue";
 
 
+const { loginUser, rules, formRef , leLoginSubmit ,dddd} = useLogin();
 const { registerUser,registerForm ,registrRules ,registerSubmit } = useRegister();
-const { loginUser, rules, formRef , handleLogin } = useLogin();
 
 
 const panelsToggle = ref(false);
@@ -271,35 +239,6 @@ const togglePanelss = () => {
         @media (max-width: 768px) {
           left: 10%;
           margin: 0 auto;
-        }
-      }
-
-      width: 32vw;
-      padding: 16px 16px;
-      background-color: #eeeeee;
-      border-radius: 8px;
-      box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
-      @media (max-width: 768px) {
-        width: 80vw;
-      }
-      .tiparea {
-        font-size: 14px;
-        text-align: right;
-        // height: 20px;
-        p {
-          margin: 0;
-          padding: 0;
-        }
-      }
-      .btn {
-        background-color: #297eff;
-        color: #fff;
-        letter-spacing: 1.5px;
-        width: 100%;
-        margin-left: auto;
-        transition: all 0.4s ease;
-        &:hover {
-          background-color: #169b64;
         }
       }
     }

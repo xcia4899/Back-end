@@ -5,6 +5,7 @@
     :rules="rules"
     status-icon
     label-width="auto"
+    label-position="left"
     class="loginForm sign-in-form"
   >
     <el-form-item label="信箱" prop="email">
@@ -41,15 +42,14 @@ const props = defineProps<{
   rules: FormRules;
   // 父層傳入的登入方法，可接收一個可選的 FormInstance（表單實例）
   // 若表單有 ref，會將它傳入讓父層能操作 validate()、resetFields() 等方法
-  handleLogin: () => void | Promise<void>;
-    
+  leLoginSubmit: () =>  Promise<void>;
+  dddd: () => void;  
 }>();
-
 
 
 // 呼叫父層傳入的 handleLogin()，並把目前的表單實例傳入
 // 父層可在裡面呼叫 form?.validate() 進行驗證
-const leLoginSubmit = () => props.handleLogin();
+const leLoginSubmit = () => props.leLoginSubmit();
 </script>
 
 <style scoped lang="scss">

@@ -27,23 +27,29 @@ export function useLogin() {
   };
 
   // 由子元件傳入要驗證的表單實例
-  const handleLogin = async () => {
+  const leLoginSubmit = async () => {
+    console.log("formRef.value",!formRef.value)
     if (!formRef.value) return;
+ 
     try {
+    
       await formRef.value.validate();
       console.log("表單驗證通過");
       console.log("信箱:", loginUser.email);
       console.log("密碼:", loginUser.password);
     } catch {
+     
       console.log("表單驗證失敗");
-      return;
     }
   };
-
+  const dddd =  () => {
+    console.log("111111")
+  };
   return {
+    dddd,
     formRef,
     loginUser,
     rules,
-    handleLogin,
+    leLoginSubmit,
   };
 }
