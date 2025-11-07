@@ -5,17 +5,17 @@
       <div class="signin-signup">
         <!-- 登錄 -->
         <LoginForm
+          ref="formRef"
           :loginUser="loginUser"
           :rules="rules"
           :formRef="formRef"
           :leLoginSubmit="leLoginSubmit"
-          :dddd="dddd"
           class="LoginForm"
           :class="{ 'LoginForm-toggle': panelsToggle }"
         />
         <!-- 注册 -->
         <RegisterForm
-        ref="registerForm"
+          ref="registerForm"
           :registerUser="registerUser"
           :registerForm="registerForm"
           :registrRules="registrRules"
@@ -61,14 +61,15 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from "vue";
 import { useLogin } from "@/hooks/useLogin";
-import { useRegister  } from "@/hooks/useRegister"
+import { useRegister } from "@/hooks/useRegister";
 
 import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 
+const { loginUser, rules, formRef, leLoginSubmit } = useLogin();
+const { registerUser, registerForm, registrRules, registerSubmit } =
+  useRegister();
 
-const { loginUser, rules, formRef , leLoginSubmit ,dddd} = useLogin();
-const { registerUser,registerForm ,registrRules ,registerSubmit } = useRegister();
 
 
 const panelsToggle = ref(false);
@@ -76,7 +77,6 @@ const panelsToggle = ref(false);
 const togglePanelss = () => {
   panelsToggle.value = !panelsToggle.value;
 };
-
 </script>
 
 <style scoped lang="scss">

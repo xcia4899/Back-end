@@ -1,6 +1,6 @@
 <template>
   <el-form
-    ref="registerForm"
+   
     :model="registerUser"
     :rules="registrRules"
     status-icon

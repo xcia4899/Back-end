@@ -35,18 +35,19 @@ export function useLogin() {
     
       await formRef.value.validate();
       console.log("表單驗證通過");
-      console.log("信箱:", loginUser.email);
-      console.log("密碼:", loginUser.password);
+      
     } catch {
      
       console.log("表單驗證失敗");
     }
+    console.log("信箱:", loginUser.email);
+      console.log("密碼:", loginUser.password);
   };
   const dddd =  () => {
     console.log("111111")
   };
   return {
-    dddd,
+    
     formRef,
     loginUser,
     rules,

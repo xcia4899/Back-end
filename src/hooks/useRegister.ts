@@ -1,4 +1,4 @@
-import { ref, reactive ,watch} from "vue";
+import { ref, reactive, watch } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 
 //註冊案件類型推斷
@@ -58,19 +58,19 @@ export function useRegister() {
   );
 
   //驗證以及提交
-// const registerSubmit = () => {};
-const registerSubmit = async () => {
-  if (!registerForm.value) return;
-  try {
-    await registerForm.value.validate(); // 通過則不拋錯
-    console.log("表單驗證通過");
+  // const registerSubmit = () => {};
+  const registerSubmit = async () => {
+    if (!registerForm.value) return;
+    try {
+      await registerForm.value.validate(); // 通過則不拋錯
+      console.log("表單驗證通過");
+    } catch (err) {
+      console.log("表單驗證失敗", err);
+    }
     console.log("姓名:", registerUser.name);
     console.log("信箱:", registerUser.email);
     console.log("密碼:", registerUser.password);
     console.log("角色:", registerUser.role);
-  } catch (err) {
-    console.log("表單驗證失敗", err);
-  }
-};
-  return { registerUser, registerForm, registrRules,registerSubmit };
+  };
+  return { registerUser, registerForm, registrRules, registerSubmit };
 }

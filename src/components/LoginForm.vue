@@ -1,6 +1,6 @@
 <template>
   <el-form
-    ref="formRef"
+    
     :model="loginUser"
     :rules="rules"
     status-icon
@@ -43,8 +43,9 @@ const props = defineProps<{
   // 父層傳入的登入方法，可接收一個可選的 FormInstance（表單實例）
   // 若表單有 ref，會將它傳入讓父層能操作 validate()、resetFields() 等方法
   leLoginSubmit: () =>  Promise<void>;
-  dddd: () => void;  
+ 
 }>();
+
 
 
 // 呼叫父層傳入的 handleLogin()，並把目前的表單實例傳入
