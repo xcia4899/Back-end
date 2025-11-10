@@ -1,6 +1,6 @@
 <template>
   <el-form
-   
+    ref="registerForm"
     :model="registerUser"
     :rules="registrRules"
     status-icon
@@ -45,47 +45,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref,watch } from "vue";
+import { ref, watch } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import type { RegisterUser } from "@/hooks/useRegister";
-import http from '@/utils/http'
+import http from "@/utils/http";
 
 // const { data } = await http.get('/users')
- const registerForm = ref<FormInstance | null>(null);
- 
+const registerForm = ref<FormInstance | null>(null);
+
 const props = defineProps<{
-  // registerForm: FormInstance | null;
   // 父層會傳進來的使用者資料物件（包含 email 與 password）
   registerUser: RegisterUser;
   // 表單驗證規則，Element Plus 的類型
   registrRules: FormRules;
   // 父層傳入的登入方法，可接收一個可選的 FormInstance（表單實例）
-  // 若表單有 ref，會將它傳入讓父層能操作 validate()、resetFields() 等方法
-  // registerSubmit: () =>  Promise<void>;
 }>();
+// console.log("1:", registerForm.value);
 const registerSubmit = async () => {
-    if (!registerForm.value) return;
-    try {
-      await registerForm.value.validate(); // 通過則不拋錯
-      console.log("表單驗證通過");
-    } catch (err) {
-      console.log("表單驗證失敗", err);
-    }
-    console.log("姓名:", props.registerUser.name);
-    console.log("信箱:", props.registerUser.email);
-    console.log("密碼:", props.registerUser.password);
-    console.log("角色:", props.registerUser.role);
-  };
+  // console.log("2:", registerForm.value);
+  if (!registerForm.value) return;
+  // console.log("11111");
+  try {
+    await registerForm.value.validate(); // 驗證成功才會繼續
+    console.log("表單驗證通過");
+  } catch {
+    console.log("表單驗證失敗");
+    return; // ← 必須中止
+  }
+  // console.log("222222");
+  //驗證成功後送出註冊資料
+  try {
+    const res = await http.post("/api/v1/auth/register", props.registerUser);
+  } catch (err) {
+    console.log("後端 API 失敗", err);
+  }
+  // console.log("333333");
+};
 
- //密碼改變時，重新驗證確認密碼
-  watch(
-    () => props.registerUser.password,
-    () => {
-      registerForm.value?.validateField("confirmPassword");
-    }
-  );
-
-
+//密碼改變時，重新驗證確認密碼
+watch(
+  () => props.registerUser.password,
+  () => {
+    registerForm.value?.validateField("confirmPassword");
+  }
+);
 </script>
 
 <style scoped lang="scss">

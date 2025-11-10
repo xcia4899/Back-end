@@ -11,6 +11,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -26,5 +27,14 @@ export default defineConfig({
         `
       }
     }
-  }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',   // 你的後端主機
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
+  },
 })

@@ -5,7 +5,7 @@
       <div class="signin-signup">
         <!-- 登錄 -->
         <LoginForm
-          ref="formRef"
+        
           :loginUser="loginUser"
           :rules="rules"
           class="LoginForm"
@@ -13,7 +13,8 @@
         />
         <!-- 注册 -->
         <RegisterForm
-          ref="registerForm"
+        
+
           :registerUser="registerUser"
           :registrRules="registrRules"
           class="RegisterForm sign-up-form"
