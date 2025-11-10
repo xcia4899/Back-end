@@ -75,11 +75,12 @@ const registerSubmit = async () => {
   // console.log("222222");
   //驗證成功後送出註冊資料
   try {
-    const res = await http.post("/api/v1/auth/register", props.registerUser);
+    const res = await http.post("/v1/auth/register", props.registerUser)
+    console.log("回傳",res);
   } catch (err) {
     console.log("後端 API 失敗", err);
   }
-  // console.log("333333");
+  // console.log("333333",res);
 };
 
 //密碼改變時，重新驗證確認密碼

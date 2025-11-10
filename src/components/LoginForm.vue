@@ -34,6 +34,10 @@ import { ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import type { LoginUser } from "@/hooks/useLogin";
 import http from '@/utils/http';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 const formRef = ref<FormInstance | null>(null);
 const props = defineProps<{
   // 父層會傳進來的使用者資料物件（包含 email 與 password）
@@ -58,7 +62,12 @@ const leLoginSubmit = async () => {
   // console.log("222222");
   //驗證成功後送出註冊資料
   try {
-    const res = await http.post("/api/v1/auth/register", props.loginUser);
+    const res = await http.post("/v1/auth/register", props.loginUser);
+    console.log("回傳",res);
+    const {token } = res.data
+    localStorage.setItem("msToken", token);
+    // 4. 跳轉頁面
+    router.push("/");
   } catch (err) {
     console.log("後端 API 失敗", err);
   }
