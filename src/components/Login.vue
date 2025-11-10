@@ -8,8 +8,6 @@
           ref="formRef"
           :loginUser="loginUser"
           :rules="rules"
-          :formRef="formRef"
-          :leLoginSubmit="leLoginSubmit"
           class="LoginForm"
           :class="{ 'LoginForm-toggle': panelsToggle }"
         />
@@ -17,9 +15,7 @@
         <RegisterForm
           ref="registerForm"
           :registerUser="registerUser"
-          :registerForm="registerForm"
           :registrRules="registrRules"
-          :registerSubmit="registerSubmit"
           class="RegisterForm sign-up-form"
           :class="{ 'RegisterForm-toggle': panelsToggle }"
         />
@@ -66,8 +62,8 @@ import { useRegister } from "@/hooks/useRegister";
 import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 
-const { loginUser, rules, formRef, leLoginSubmit } = useLogin();
-const { registerUser, registerForm, registrRules, registerSubmit } =
+const { loginUser, rules } = useLogin();
+const { registerUser, registrRules } =
   useRegister();
 
 

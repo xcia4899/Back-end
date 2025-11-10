@@ -11,7 +11,7 @@ export interface RegisterUser {
 }
 
 export function useRegister() {
-  const registerForm = ref<FormInstance | null>(null);
+ 
 
   const registerUser = reactive<RegisterUser>({
     name: "",
@@ -50,27 +50,15 @@ export function useRegister() {
   };
 
   //密碼改變時，重新驗證確認密碼
-  watch(
-    () => registerUser.password,
-    () => {
-      registerForm.value?.validateField("confirmPassword");
-    }
-  );
+  // watch(
+  //   () => registerUser.password,
+  //   () => {
+  //     registerForm.value?.validateField("confirmPassword");
+  //   }
+  // );
 
   //驗證以及提交
   // const registerSubmit = () => {};
-  const registerSubmit = async () => {
-    if (!registerForm.value) return;
-    try {
-      await registerForm.value.validate(); // 通過則不拋錯
-      console.log("表單驗證通過");
-    } catch (err) {
-      console.log("表單驗證失敗", err);
-    }
-    console.log("姓名:", registerUser.name);
-    console.log("信箱:", registerUser.email);
-    console.log("密碼:", registerUser.password);
-    console.log("角色:", registerUser.role);
-  };
-  return { registerUser, registerForm, registrRules, registerSubmit };
+  
+  return { registerUser, registrRules };
 }

@@ -34,23 +34,39 @@ import { ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import type { LoginUser } from "@/hooks/useLogin";
 
+ const formRef = ref<FormInstance | null>(null);
 const props = defineProps<{
-  formRef: FormInstance | null;
+  // formRef: FormInstance | null;
   // 父層會傳進來的使用者資料物件（包含 email 與 password）
   loginUser: LoginUser;
   // 表單驗證規則，Element Plus 的類型
   rules: FormRules;
   // 父層傳入的登入方法，可接收一個可選的 FormInstance（表單實例）
   // 若表單有 ref，會將它傳入讓父層能操作 validate()、resetFields() 等方法
-  leLoginSubmit: () =>  Promise<void>;
+  // leLoginSubmit: () =>  Promise<void>;
  
 }>();
 
-
+ const leLoginSubmit = async () => {
+    console.log("formRef.value",!formRef.value)
+    if (!formRef.value) return;
+ 
+    try {
+    
+      await formRef.value.validate();
+      console.log("表單驗證通過");
+      
+    } catch {
+     
+      console.log("表單驗證失敗");
+    }
+    console.log("信箱:", props.loginUser.email);
+      console.log("密碼:", props.loginUser.password);
+  };
 
 // 呼叫父層傳入的 handleLogin()，並把目前的表單實例傳入
 // 父層可在裡面呼叫 form?.validate() 進行驗證
-const leLoginSubmit = () => props.leLoginSubmit();
+// const leLoginSubmit = () => props.leLoginSubmit();
 </script>
 
 <style scoped lang="scss">
